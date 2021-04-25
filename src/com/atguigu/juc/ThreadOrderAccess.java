@@ -76,6 +76,7 @@ public class ThreadOrderAccess {
                 resource.print10();
             }
         },"t2").start();
+
         new Thread(()->{
             for (int i = 0; i < 10; i++) {
                 resource.print15();
