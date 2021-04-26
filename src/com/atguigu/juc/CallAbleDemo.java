@@ -18,7 +18,12 @@ class MyThread implements Callable<String>{
 * */
 public class CallAbleDemo {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        FutureTask<String> futureTask = new FutureTask<>(new MyThread());
+        //FutureTask<String> futureTask = new FutureTask<>(new MyThread());
+        FutureTask<String> futureTask = new FutureTask<>(() -> {
+            System.out.println("-----come in");
+            Thread.sleep(5000);
+            return "hello java1116";
+        });
         Thread thread = new Thread(futureTask);
         thread.start();
 

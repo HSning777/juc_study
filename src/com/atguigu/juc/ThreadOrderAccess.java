@@ -5,11 +5,47 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 class ShareResource{
-    int flag = 1;
-    Lock lock = new ReentrantLock();
-    Condition condition1 = lock.newCondition();
-    Condition condition2 = lock.newCondition();
-    Condition condition3 = lock.newCondition();
+    private int flag = 1;
+    private Lock lock = new ReentrantLock();
+    private Condition condition1 = lock.newCondition();
+    private Condition condition2 = lock.newCondition();
+    private Condition condition3 = lock.newCondition();
+
+    public void print(Integer flag){
+        lock.lock();
+        try{
+            while(flag != 0){
+                condition1.await();
+            }
+            for (int i = 0; i < 5; i++) {
+                System.out.println(Thread.currentThread().getName()+" : AA");
+                flag++;
+            }
+            condition2.signal();
+
+            while (flag < 5 || flag > 15){
+                condition2.await();
+            }
+            for (int i = 0; i < 10; i++) {
+                System.out.println(Thread.currentThread().getName()+" : BB");
+                flag++;
+            }
+            condition3.signal();
+
+            while(flag < 25){
+                condition3.await();
+            }
+            for (int i = 0; i < 15; i++) {
+                System.out.println(Thread.currentThread().getName()+" : CC");
+            }
+            condition1.signal();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            lock.unlock();
+        }
+    }
 
     public void print5(){
         lock.lock();
